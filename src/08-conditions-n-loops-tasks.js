@@ -329,8 +329,22 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  if (str.length === 0) return true;
+  const stack = [];
+  let result = true;
+  const openBracket = '({[<';
+  const closeBracket = ')}]>';
+  str.split('').forEach((elem) => {
+    if (openBracket.indexOf(elem) !== -1) {
+      stack.push(openBracket.indexOf(elem));
+    } else if (stack[stack.length - 1] === closeBracket.indexOf(elem)) {
+      stack.pop();
+    } else {
+      result = false;
+    }
+  });
+  return stack.length === 0 && result === true;
 }
 
 
@@ -354,8 +368,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -371,8 +385,27 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const pathArr = pathes.map((elem) => elem.split('/'));
+  if (!(pathes.every((elem) => elem[0] === '/'))) {
+    return '';
+  }
+  let path = '';
+  for (let i = 0; i < pathArr[0].length; i += 1) {
+    let compare = true;
+    for (let j = 0; j < pathArr.length; j += 1) {
+      if (pathArr[0][i] !== pathArr[j][i]) {
+        compare = false;
+        break;
+      }
+    }
+    if (!compare) {
+      break;
+    } else {
+      path += `${pathArr[0][i]}/`;
+    }
+  }
+  return path;
 }
 
 
@@ -394,8 +427,21 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const m3 = [];
+  const matrixLength = Math.min(m1.length, m2[0].length);
+  for (let i = 0; i < matrixLength; i += 1) {
+    const strLine = [];
+    for (let j = 0; j < matrixLength; j += 1) {
+      let str = 0;
+      for (let k = 0; k < m2.length; k += 1) {
+        str += m1[i][k] * m2[k][j];
+      }
+      strLine.push(str);
+    }
+    m3.push(strLine);
+  }
+  return m3;
 }
 
 
