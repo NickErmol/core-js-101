@@ -274,17 +274,10 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  // const array = [];
-  // array.length = (arr.length * (arr.length + 1)) / 2;
-  // array.fill(0, 0);
-  // // array.push(arr[0]);
-  // arr.map((elem, index) => {
-  //   array.fill(elem, array.length, array.length + index + 1);
-  //   return false;
-  // });
-  // return array;
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  const temp = arr.map((item, ind) => new Array(ind + 1).fill(item));
+  const res = temp.reduce((acc, val) => acc.concat(val), []);
+  return res;
 }
 
 
@@ -527,8 +520,16 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const res = array.reduce((acc, item) => {
+    if (!acc.has(keySelector(item))) {
+      acc.set(keySelector(item), [valueSelector(item)]);
+    } else {
+      acc.get(keySelector(item)).push(valueSelector(item));
+    }
+    return acc;
+  }, new Map());
+  return res;
 }
 
 
