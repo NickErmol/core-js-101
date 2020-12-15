@@ -115,32 +115,68 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  resultValue: '',
+  element(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.resultValue = this.resultValue + value;
+    builderObject.weight = 1;
+    this.error(builderObject.weight);
+    return builderObject;
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.weight = 2;
+    this.error(builderObject.weight);
+    builderObject.resultValue = `${this.resultValue}#${value}`;
+    return builderObject;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.weight = 3;
+    this.error(builderObject.weight);
+    builderObject.resultValue = `${this.resultValue}.${value}`;
+    return builderObject;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.weight = 4;
+    this.error(builderObject.weight);
+    builderObject.resultValue = `${this.resultValue}[${value}]`;
+    return builderObject;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.weight = 5;
+    this.error(builderObject.weight);
+    builderObject.resultValue = `${this.resultValue}:${value}`;
+    return builderObject;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  pseudoElement(value) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.weight = 6;
+    this.error(builderObject.weight);
+    builderObject.resultValue = `${this.resultValue}::${value}`;
+    return builderObject;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  combine(selector1, combinator, selector2) {
+    const builderObject = Object.create(cssSelectorBuilder);
+    builderObject.resultValue = `${selector1.stringify()} ${combinator} ${selector2.stringify()}`;
+    return builderObject;
+  },
+  stringify() {
+    return this.resultValue;
+  },
+  error(weight) {
+    if (this.weight === weight && (weight === 1 || weight === 2 || weight === 6)) { throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector'); }
+    if (this.weight > weight) {
+      throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    }
   },
 };
 

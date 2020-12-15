@@ -100,15 +100,7 @@ function chainPromises(array, action) {
   const arr = [];
   const result = array.map((elem) => Promise.resolve(elem).then((value) => arr.push(value))
     .then(() => arr.reduce(action)).catch(() => {}));
-  // arr.reduce(action).catch(() => {});
   return result[0];
-  // dd
-  // const res = array.map((it) => Promise.resolve(it)
-  //   .then((value) => {
-  //     arr.push(value);
-  //   })
-  //   .then(() => arr.reduce(action))
-  //   .catch(() => { }));
 }
 
 module.exports = {
